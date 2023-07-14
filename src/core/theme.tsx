@@ -1,0 +1,43 @@
+import React from 'react';
+
+const theme = {
+  colors: {
+    STATUS_OFF: '#9ea7ad',
+    STATUS_STANDBY: '#2dccff',
+    STATUS_NORMAL: '#56f000',
+    STATUS_CAUTION: '#fce83a',
+    STATUS_SERIOUS: '#ffb302',
+    STATUS_CRITICAL: '#ffb302',
+    WHITE: '#FFF',
+    BACKGROUND: '#f8f8f8',
+    BLACK: '#000000',
+    GREY: '#898989',
+    THEME: '#264e97',
+    PRIMARY: '#00A599',
+    INFO: '#0084ff',
+    ERROR: '#f7956f',
+    WARNING: '#ffe891',
+    SUCCESS: '#69ca9c',
+    TRANSPARENT: 'transparent',
+    INPUT: '#dfdfdf',
+    ROOM_CARD_BORDER: '#f3f2f2',
+    PLACEHOLDER: '#9FA5AA',
+    TEXT_COLOR: '#363739',
+    NAV_BAR: '#F9F9F9',
+    BLOCK: '#eeeeee',
+    BLOCK_SHADOW: '#ffffff',
+    MUTED: '#6d7174',
+    NEUTRAL: 'rgba(255,255,255, 0.65)',
+    FACEBOOK: '#3B5998',
+    TWITTER: '#5BC0DE',
+    DRIBBBLE: '#EA4C89',
+    ERROR_BACKGROUND: '#faf3e8',
+    WARNING_BACKGROUND: '#faf8e8',
+    SUCCESS_BACKGROUND: '#f6fcf1',
+    ICON: '#000000',
+    MENU_ITEM_BORDER: '#cdd5db',
+    ORANGE: '#ED6C50',
+  },
+};
+
+export default theme;
