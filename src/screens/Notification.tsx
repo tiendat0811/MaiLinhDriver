@@ -68,8 +68,7 @@ const Notification = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.picker}>
-        <Text style={styles.headerTitle}>Xem lương cuối kỳ theo tháng</Text>
-        <Text style={styles.menu}>Chọn thời gian </Text>
+        <Text style={styles.menu}>Chọn thời gian</Text>
         <View style={styles.pickerInput}>
           <Picker
             selectedValue={pickedDate}

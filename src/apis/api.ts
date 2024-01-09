@@ -18,9 +18,9 @@ export const layDoanhThuThang = (date: any, msnv: any) => {
     });
 };
 
-export const layLuongNhanVien = (date: any, msnv: any) => {
+export const layLuongNhanVien = async (date: any, msnv: any) => {
   const url = `/api/salary?pwsws=B@nCNTT!20I8&usr=${msnv}&dte=${date}&staffcode=123`;
-  return instance
+  return await instance
     .get(url)
     .then(res => {
       return res;

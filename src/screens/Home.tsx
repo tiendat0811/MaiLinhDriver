@@ -18,6 +18,8 @@ const Home = ({navigation}: any) => {
   const [pickedDate, setPickedDate] = useState<string>('1-2023');
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [salary, setSalary] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
   const notPrice = ['Ngày', 'Mã bãi', 'Số tài', 'Biển số xe'];
   useEffect(() => {
     const currentDate = new Date();
@@ -48,6 +50,20 @@ const Home = ({navigation}: any) => {
     layDoanhThuThang(pickedDate, msnv)
       .then(res => {
         setData(res.data);
+        let total = 0;
+        let salary = 0;
+        res.data.map((item: any) => {
+          item.DetailModels.map((detail: any) => {
+            if (detail.title === 'Còn lại LX') {
+              salary += Number(detail.value);
+            }
+            if (detail.title === 'Doanh thu') {
+              total += Number(detail.value);
+            }
+          });
+        });
+        setSalary(salary);
+        setTotal(total);
         setIsLoading(false);
       })
       .catch(err => {
@@ -58,8 +74,7 @@ const Home = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.picker}>
-        <Text style={styles.title}>Xem doanh thu từng ngày theo tháng</Text>
-        <Text style={styles.menu}>Chọn thời gian </Text>
+        <Text style={styles.menu}>Chọn tháng</Text>
         <View style={styles.pickerInput}>
           <Picker
             selectedValue={pickedDate}
@@ -74,6 +89,43 @@ const Home = ({navigation}: any) => {
           <View style={{flex: 1}}>
             <Icon name="caret-down" type="ionicon" />
           </View>
+        </View>
+        <View
+          style={[
+            styles.twoColumns,
+            {
+              margin: 0,
+            },
+          ]}>
+          <Text style={styles.text}>Doanh thu tạm tính</Text>
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: 18,
+              },
+            ]}>
+            {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} VND
+          </Text>
+        </View>
+        <View
+          style={[
+            styles.twoColumns,
+            {
+              margin: 0,
+              marginTop: 5,
+            },
+          ]}>
+          <Text style={styles.text}>Lương tạm tính</Text>
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: 18,
+              },
+            ]}>
+            {salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} VND
+          </Text>
         </View>
       </View>
       <View style={styles.result}>
@@ -104,7 +156,18 @@ const Home = ({navigation}: any) => {
                         {notPrice.includes(detail.title) ? (
                           <Text style={styles.text}>{detail.value}</Text>
                         ) : (
-                          <Text style={styles.text}>
+                          <Text
+                            style={[
+                              styles.text,
+                              {
+                                color:
+                                  detail.title === 'Còn lại LX'
+                                    ? 'red'
+                                    : 'black',
+                                fontSize:
+                                  detail.title === 'Còn lại LX' ? 18 : 16,
+                              },
+                            ]}>
                             {detail.value
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}

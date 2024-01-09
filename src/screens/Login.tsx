@@ -11,10 +11,9 @@ import {getData, storeData} from '../core/async.storage';
 import {AuthContext} from '../contexts/AuthContext';
 import TextField from '../components/TextField';
 import ButtonSmall from '../components/ButtonSmall';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}: any) => {
-  const [text, setText] = useState('002104');
+  const [text, setText] = useState('');
   const auth = useContext(AuthContext);
 
   const handleLogin = async () => {

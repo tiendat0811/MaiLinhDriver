@@ -10,6 +10,9 @@ import {Icon} from '@rneui/themed';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {getData} from '../core/async.storage';
 import LoadingScreen from '../screens/Loading';
+import {layThongTinNhanVien} from '../apis/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
 
 export type RootStackParamList = {
@@ -29,16 +32,47 @@ const Navigator = () => {
   const Auth = useContext(AuthContext);
   const isLoggedin: any = Auth?.auth.getToken;
 
+  const isFocused = useIsFocused();
+
+  const getMSNV = async () => {
+    setIsLoading(true);
+    const msnvSTG: any = await getData();
+    setMsnv(msnvSTG);
+    setIsLoading(false);
+    return msnvSTG;
+  };
+
   useEffect(() => {
-    const getMSNV = async () => {
-      setIsLoading(true);
-      const msnvSTG: any = await getData();
-      setMsnv(msnvSTG);
-      setIsLoading(false);
-      return msnvSTG;
-    };
     getMSNV();
   }, []);
+
+  const [name, setName] = useState<any>();
+
+  useEffect(() => {
+    if (msnv) {
+      Auth?.setAuth({
+        token: msnv,
+        getToken: true,
+      });
+      layThongTinNhanVien(msnv)
+        .then(res => {
+          setName(res.data[0].HoTen);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [msnv]);
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('msnv');
+    await Auth?.setAuth({
+      token: '',
+      getToken: false,
+    });
+  };
+
   const HomeTab = () => {
     return (
       <Tab.Navigator
@@ -60,8 +94,25 @@ const Navigator = () => {
           name="HomePage"
           component={Home}
           options={{
-            title: 'Doanh thu ngày',
-            headerShown: false,
+            title: name || 'Trang chủ',
+            headerShown: true,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  handleLogout();
+                }}>
+                <Text
+                  style={{
+                    marginRight: 10,
+                    padding: 5,
+                    backgroundColor: 'gray',
+                    borderRadius: 5,
+                    color: '#fff',
+                  }}>
+                  Đăng xuất
+                </Text>
+              </TouchableOpacity>
+            ),
             tabBarIcon: ({size, color}) => {
               return (
                 <Icon size={size} name="receipt" type="ionicon" color={color} />
@@ -73,7 +124,7 @@ const Navigator = () => {
           name="Notification"
           component={Notification}
           options={{
-            headerShown: false,
+            headerShown: true,
             title: 'Tổng lương nhận',
             tabBarIcon: ({size, color}) => {
               return (
@@ -82,7 +133,7 @@ const Navigator = () => {
             },
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Profile"
           component={Profile}
           options={{
@@ -94,7 +145,7 @@ const Navigator = () => {
               );
             },
           }}
-        />
+        /> */}
       </Tab.Navigator>
     );
   };
